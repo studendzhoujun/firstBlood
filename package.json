@@ -1,6 +1,6 @@
 {
   "name": "hoo-generator",
-  "version": "1.0.4",
+  "version": "1.1.1",
   "description": "wap application generator",
   "main": "bin/hoo.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "commander": "^2.9.0",
     "mkdirp": "^0.5.1",
     "path": "^0.12.7",
+    "request": "^2.81.0",
     "sorted-object": "^2.0.1"
   },
   "keywords": [

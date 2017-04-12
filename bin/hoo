@@ -6,10 +6,11 @@ var fs = require('fs');
 var readline = require('readline');
 var sortedObject = require('sorted-object');
 var colors = require('colors');
-var exec = require('child_process').exec
-console.log('hoo <1.1.0> starting.......'.inverse);
+var exec = require('child_process').exec;
+var request = require('request');
+console.log('hoo <1.1.1> starting.......'.inverse);
 program
-    .version('1.1.0')
+    .version('1.1.1')
     .option('-p, --package', 'update the project package')
     .option('-v, --version', 'list version')
     .option('-i, --init', 'init a project')
@@ -39,18 +40,23 @@ if (program.init) {
     main();
 }
 if (program.package) {
-    console.log('update package'.yellow)
-    var temPkg = require('../package.json');
-    var pkg = require(process.cwd() + '/package.json');
-    var temPkgD = temPkg.dependencies;
-    var pkgD = pkg.dependencies;
-    for(var item in temPkgD){
-        if(pkgD[item]){
-            pkgD[item]=temPkgD[item];
+    console.log('update package'.yellow);
+    request('https://js.meixincdn.com/m/h5/src/package.json', function (error, response, body) {
+        if (!error) {
+            var temPkgD = JSON.parse(body).dependencies;
+            var pkg = require(process.cwd() + '/package.json');
+            var pkgD = pkg.dependencies;
+            for (var item in temPkgD) {
+                if (pkgD[item]) {
+                    pkgD[item] = temPkgD[item];
+                }
+            }
+            pkg.dependencies = pkgD;
+            write(process.cwd() + '/package.json', JSON.stringify(pkg, null, 2) + '\n');
+        }else{
+            console.log(error)
         }
-    }
-    pkg.dependencies=pkgD;
-    write(process.cwd() + '/package.json', JSON.stringify(pkg, null, 2) + '\n');
+    })
 }
 //main();
 function main() {
