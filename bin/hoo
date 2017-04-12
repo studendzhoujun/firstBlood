@@ -149,17 +149,15 @@ function createApplication(app_name, path) {
     //创建文件目录
     mkdir(path, function () {
         mkdir(path + '/src');
-        mkdir(path + '/src/js');
-        mkdir(path + '/src/images');
-        mkdir(path + '/src/pro', function () {
+        mkdir(path + '/src/cart', function () {
             complete();
         });
 
-        mkdir(path + '/src/style', function () {
+        mkdir(path + '/src/core', function () {
             complete();
         });
 
-        mkdir(path + '/src/style', function () {
+        mkdir(path + '/src/u', function () {
             complete();
         });
         write(path + '/serve.js', server);
