@@ -7,14 +7,14 @@ var readline = require('readline');
 var sortedObject = require('sorted-object');
 var colors = require('colors');
 var exec = require('child_process').exec
-console.log('hoo <1.0.4> starting.......'.inverse);
+console.log('hoo <1.1.0> starting.......'.inverse);
 program
-    .version('1.0.4')
-    .option('-p, --package', 'update package')
+    .version('1.1.0')
+    .option('-p, --package', 'update the project package')
     .option('-v, --version', 'list version')
     .option('-i, --init', 'init a project')
     .option('-d, --depends', 'install node_modules', depends)
-    .option('-l, --listPkg', 'list package', listPkg)
+    .option('-l, --listPkg', 'list the project package', listPkg)
     .parse(process.argv);
 function depends() {
     console.log('install depends'.rainbow);

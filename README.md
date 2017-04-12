@@ -41,6 +41,9 @@ This hoo-generator can also be further configured with the following command lin
     -h, --help          output usage information
         --version       output the version number
     -i, --init          init a project
+    -l, --listPkg       list the project package
+    -p, --package       update the project package
+    -d, --depends       install node_modules
 ## License
 
 [MIT](LICENSE)
