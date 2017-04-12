@@ -7,81 +7,68 @@ var readline = require('readline');
 var sortedObject = require('sorted-object');
 var colors = require('colors');
 var exec = require('child_process').exec
-console.log('starting.......'.inverse);
+console.log('hoo <1.0.4> starting.......'.inverse);
 program
-    .version('1.0.0')
-    .option('-p, --package', 'list package')
+    .version('1.0.4')
+    .option('-p, --package', 'update package')
     .option('-v, --version', 'list version')
     .option('-i, --init', 'init a project')
-    .option('-c, --choose [type]', 'add the type of')
     .option('-d, --depends', 'install node_modules', depends)
     .option('-l, --listPkg', 'list package', listPkg)
     .parse(process.argv);
-
 function depends() {
     console.log('install depends'.rainbow);
-    exec('node -v && cd wap-fe && npm install', function (err, stdout, stderr) {
+    exec('node -v && npm install', function (err, stdout, stderr) {
         console.log(stdout)
     })
 }
 function listPkg() {
-    console.log(__dirname)
-    console.log(process.cwd())
-    emptyDirectory('wap-fe', function (is) {
-        if (is) {
-            console.log('wap-fe is empty'.red)
-        } else {
-            var packList = require(__dirname + '/wap-fe/package.json').dependencies;
-            for (var item in packList) {
-                console.log(item.red + '-----'.rainbow + packList[item])
-            }
-        }
-    })
+    console.log(__dirname);
+    console.log(process.cwd());
+    var temPkg = require('../package.json');
+    var pkg = require(process.cwd() + '/package.json');
+    var temPkgD = temPkg.dependencies;
+    var pkgD = pkg.dependencies;
+    console.log(temPkg.name);
+    console.log(pkg.name);
+    for (var item in pkgD) {
+        console.log(item.red + '-----'.rainbow + pkgD[item])
+    }
 }
 if (program.init) {
     main();
 }
 if (program.package) {
     console.log('update package'.yellow)
-    //先要判断项目文件有没有且package.json有没有
-    emptyDirectory('wap-fe', function (is) {
-        if (is) {
-            console.log('   \033[36mwap-fe is empty\033[0m : ');
-        } else {
-            var pack = require(__dirname + '/wap-fe/package.json');
-            var temPkg = require(__dirname + '/templates/js/package.json');
-            var temPkgList = temPkg.dependencies;
-            var packList = pack.dependencies;
-            for (var item in temPkgList) {
-                if (packList[item]) {
-                    packList[item] = temPkgList[item];
-                }
-            }
-            pack.dependencies = packList;
-            write(__dirname + '/wap-fe/package.json', JSON.stringify(pack, null, 2) + '\n');
+    var temPkg = require('../package.json');
+    var pkg = require(process.cwd() + '/package.json');
+    var temPkgD = temPkg.dependencies;
+    var pkgD = pkg.dependencies;
+    for(var item in temPkgD){
+        if(pkgD[item]){
+            pkgD[item]=temPkgD[item];
         }
-    })
-
+    }
+    pkg.dependencies=pkgD;
+    write(process.cwd() + '/package.json', JSON.stringify(pkg, null, 2) + '\n');
 }
 //main();
 function main() {
     console.log('init program');
     var destinationPath = program.args.shift() || '.';
     var appName = createAppName(path.resolve(destinationPath)) || 'wap';
-    console.log(destinationPath);
-    //createApplication(appName,destinationPath)
     emptyDirectory(destinationPath, function (empty) {
         if (empty) {
             createApplication(appName, destinationPath)
         } else {
-            console.log('wap-fe is here')
-            confirm('wap-fe is not empty, Are you want to upgrate modules? [y/N] '.red, function (ok) {
+            console.log(`directory ${appName} is here`)
+            confirm(`directory ${appName} is not empty, Are you want to exit? [y/N]`.red, function (ok) {
                 if (ok) {
                     //process.stdin.destroy();
-                    //createApplication(appName, destinationPath);
-                    console.log('升级完成')
+                    console.log('exit')
+                    process.stdin.destroy();
                 } else {
-                    console.log('升级完成')
+                    console.log('going')
 
                 }
             })
