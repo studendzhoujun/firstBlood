@@ -1,10 +1,13 @@
 {
   "name": "hoo-generator",
-  "version": "1.1.1",
+  "version": "1.1.4",
   "description": "wap application generator",
-  "main": "bin/hoo.js",
+  "main": "bin/hoo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "hoo": "./bin/hoo"
   },
   "author": "zj",
   "license": "ISC",
@@ -20,7 +23,7 @@
   },
   "keywords": [
     "hoo",
-    "wep",
+    "web",
     "node"
   ],
   "licese": "MIT",

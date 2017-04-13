@@ -8,9 +8,9 @@ var sortedObject = require('sorted-object');
 var colors = require('colors');
 var exec = require('child_process').exec;
 var request = require('request');
-console.log('hoo <1.1.1> starting.......'.inverse);
+console.log('hoo <1.1.4> starting.......'.inverse);
 program
-    .version('1.1.1')
+    .version('1.1.4')
     .option('-p, --package', 'update the project package')
     .option('-v, --version', 'list version')
     .option('-i, --init', 'init a project')
@@ -53,7 +53,7 @@ if (program.package) {
             }
             pkg.dependencies = pkgD;
             write(process.cwd() + '/package.json', JSON.stringify(pkg, null, 2) + '\n');
-        }else{
+        } else {
             console.log(error)
         }
     })
@@ -112,7 +112,7 @@ function mkdir(path, fn) {
  * @param {string} path 
  */
 function createApplication(app_name, path) {
-    var wait = 4;
+    var wait = 5;
 
     console.log();
     function complete() {
@@ -134,28 +134,36 @@ function createApplication(app_name, path) {
         console.log();
     }
     //copy模板里的内容
-    var server = loadTemplate('js/server.js');
-    var webpack = loadTemplate('js/webpack.config.js');
-    var gulpfile = loadTemplate('js/gulpfile.js');
+    var app = loadTemplate('js/app.js');
+    var index=loadTemplate('js/index.js');
+    var indexejs=loadTemplate('views/index.ejs');
+    var layoutejs=loadTemplate('views/layout.ejs');
+    var errorejs=loadTemplate('views/error.ejs');
     var gitignore = loadTemplate('js/gitignore');
     var package = loadTemplate('js/package.json');
     //创建文件目录
     mkdir(path, function () {
         mkdir(path + '/src');
-        mkdir(path + '/src/cart', function () {
+        mkdir(path+'/src/cart');
+        mkdir(path+'/src/detail');
+        mkdir(path + '/lib', function () {
             complete();
         });
 
-        mkdir(path + '/src/core', function () {
+        mkdir(path + '/server', function () {
+            write(path + '/server/app.js', app);
+            mkdir(path+'/server/routes',function(){
+              write(path + '/server/routes/index.js', index);
+              complete();
+            })
+            mkdir(path+'/server/views',function(){
+                write(path + '/server/views/index.ejs', indexejs);
+                write(path + '/server/views/layout.ejs', layoutejs);
+                write(path + '/server/views/error.ejs', errorejs);
+                complete();
+            })
             complete();
         });
-
-        mkdir(path + '/src/u', function () {
-            complete();
-        });
-        write(path + '/serve.js', server);
-        write(path + '/webpack.config.js', webpack);
-        write(path + '/gulpfile.js', gulpfile);
         write(path + '/.gitignore', gitignore);
         write(path + '/package.json', package);
         complete();
